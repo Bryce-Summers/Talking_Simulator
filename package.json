@@ -1,0 +1,38 @@
+{
+  "name": "SVE_Fluids",
+  "version": "1.0.0",
+  "description": "A three.js implementation of a fluid simulator. Made as part of the Short Visual Experiment (SVE) series project.",
+  "main": "index.html",
+  "scripts": {
+    "test": "hello"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Bryce-Summers/SVE_Fluids.git"
+  },
+  "keywords": [
+    "SVE",
+    "Short",
+    "Visual",
+    "Experiment",
+    "Jos",
+    "Stam",
+    "Fluid",
+    "Simulation",
+    "Linear",
+    "Algebra"
+  ],
+  "author": "Bryce Summers",
+  "license": "???",
+  "bugs": {
+    "url": "https://github.com/Bryce-Summers/SVE_Fluids/issues"
+  },
+  "homepage": "https://github.com/Bryce-Summers/SVE_Fluids",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-include-source": "^1.0.0",
+    "three-js": "79"
+  }
+}
