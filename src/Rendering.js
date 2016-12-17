@@ -10,7 +10,7 @@ var scene = new THREE.Scene();
 
 var dim = {x:0, y:0, w:window.innerWidth, h:window.innerHeight, padding:10};
 var camera = new THREE.OrthographicCamera( dim.x, dim.x + dim.w, dim.y, dim.y + dim.h, 1, 1000 );
-camera.position.z = -2;
+camera.position.z = 5;
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -26,6 +26,8 @@ var params = {};
 params.size = 32;
 
 var padding = 20;
+
+var text_meshes = new THREE.Object3D();
 
 function new_text_mesh(str)
 {
@@ -79,15 +81,28 @@ function new_line_box(col)
 	return line;
 }
 
+function refresh_all_text()
+{
+    current_texts = TREE.getCurrentText()
+    for(var i = 0; i < TREE.N; i++)
+    {
+        updateTextMesh(i, current_texts[i])
+    }
+}
+
 // Updates the text text mesh on the screen with the given index to the input string.
 function updateTextMesh(index, str)
 {
 	var i = index;
 	
 	scene.remove(text_mesh[i]);
+    text_meshes.remove(text_mesh[i]);
+
 	text_mesh[i] = new_text_mesh(str);
 	text_mesh[i].position.y = getY(i);
+
 	scene.add(text_mesh[i]);
+    scene.add(text_mesh[i]);
 
 }
 

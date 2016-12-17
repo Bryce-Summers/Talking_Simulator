@@ -103,7 +103,7 @@ function onMouseDown( event )
 	
 	
 	current_highlight = false;
-	updateTextMesh(current_index, current_string);
+	updateTextMesh(current_index, TREE.getText(current_index));
 	current_index = index;
 	current_highlight = true;
 	

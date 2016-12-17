@@ -8,8 +8,9 @@
 function NEW_NODE()
 {
     var node = {};
-    node.txt = "";
+    node.txt = "Say something.";
     node.children = [];
+    node.default = true
     return node;
 }
 
@@ -38,10 +39,18 @@ TalkTree.prototype =
 
         for(var i = 0; i < this.N; i++)
         {
-            output.push(children[i]);
+            output.push(children[i].txt);
         }
 
         return output;
+    },
+
+    getText(index)
+    {
+        var children = this.current.children;
+        var node = children[index]
+
+        return node.txt;
     },
 
     // Expands the current node with childen nodes if necessary.
@@ -53,25 +62,31 @@ TalkTree.prototype =
         // Already Expanded.
         if(children.length > 0)
         {
-            return;
+            return false;
         }
 
         for(var i = 0; i < this.N; i++)
         {
             children.push(NEW_NODE());
         }
+
+        return true;
     },
 
     setNode(str, index)
     {
         var children = this.current.children;
-        children[index].txt = str;
+        node = children[index]
+        node.txt = str;
+        node.default = false;
     },
 
+    // Goes to the indicated child,
+    // returns true iff the child node was a leaf and has now been expanded.
     gotoChild(index)
     {
         this.current = this.current.children[index];
-        this._expandCurrentNode();
+        return this._expandCurrentNode();
     },
 
     gotoRoot()

@@ -16,14 +16,28 @@ var col1 = 0x3B5998;
 var col2 = 0xE9EBEE;
 var current_highlight = false;
 
+var goto_root_next = false;
 
-enterChild()
+// Expression writing logic.
+function enterChild()
 {
-	gotoChild(index)	
+    TREE.setNode(current_string, current_index);
+
+    if(goto_root_next)
+    {
+        TREE.gotoRoot()
+        goto_root_next = false;
+    }
+    else
+    {
+    	goto_root_next = TREE.gotoChild(current_index);
+    }
+    refresh_all_text();
 }
 
 
 // Animation.
+time = 0
 function animate_scene()
 {
 	var y_dest = getY(current_index - .5);
@@ -32,21 +46,29 @@ function animate_scene()
 	var y_new  = (y_dest*1 + y_src*9)/10;
 
 	setClickBoxPosition(y_new);
+
+    // This should make the text meshes rotate in some sort of animated and thematic way.
+    if(text_meshes)
+    {
+        var len = text_meshes.children.length
+        
+        for(var i = 0; i < len; i++)
+        {
+            mesh = text_meshes.children[i]
+            rotation = mesh.rotation
+            rotation.z = Math.random() * Math.PI/8 - Math.PI/4
+        }
+    }
 }
 
 function start()
 {
 	// Font is now loaded.
-	current_string = "Type!"
+	strings = TREE.getCurrentText()
 	for(var i = 0; i < TREE.getBranchNum(); i++)
 	{
-		current_index = i;
-		updateTextMesh(i, current_string)
-	}
-	current_string = "";
-	current_index = 0;
-	current_highlight = true;
-	updateTextMesh(0, "");
+	   updateTextMesh(i, strings[i])
+    }
 	
 	// Add horizontal Lines.
 	for(var i = 0; i < TREE.getBranchNum(); i++)
@@ -71,10 +93,6 @@ loader.load( 'fonts/' + 'optimer_regular.typeface.json', function ( response ) {
 	params.font = font;
 	start();
 } );
-
-
-
-camera.position.z = 5;
 
 var render = function () {
 	requestAnimationFrame( render );
