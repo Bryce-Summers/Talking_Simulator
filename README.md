@@ -1,4 +1,4 @@
-# Talking_Simulator
-A personal Echo chamber.
+# Echo Chamber
+A personal space for talking to yourself.
 
-[Link to online. [FIXME]](https://www.google.com "Google's Homepage")
+[Play the Art Online!](https://bryce-summers.github.io/Talking_Simulator/ "Echo Chamber Page")
