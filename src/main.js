@@ -10,19 +10,46 @@
 current_string = '';
 text_mesh = [];
 current_index = 0;
+cursor_mesh = null; // The current mesh being written on the screen by user.
 
 var font = null;
 var col1 = 0x3B5998;
 var col2 = 0xE9EBEE;
 var current_highlight = false;
 
-var goto_root_next = false;
+function executeStatement()
+{
+    var likes = TREE.getLikes(current_index);
+
+    if (legalText())
+    {
+      current_string = likes + " likes: " + current_string;
+      enterChild();
+    }
+}
+
+function legalText()
+{
+    return current_string.length > 0
+}
 
 // Expression writing logic.
 function enterChild()
 {
     TREE.setNode(current_string, current_index);
 
+    if(TREE.childExpanded(current_index))
+    {
+        TREE.gotoChild(current_index);
+    }
+    else
+    {
+        // Expand the child, then go to the root.
+        TREE.gotoChild(current_index);   
+        TREE.gotoRoot();
+    }
+
+    /*
     if(goto_root_next)
     {
         TREE.gotoRoot()
@@ -30,9 +57,11 @@ function enterChild()
     }
     else
     {
-    	goto_root_next = TREE.gotoChild(current_index);
-    }
+        goto_root_next = TREE.gotoChild(current_index);
+    }*/
+
     refresh_all_text();
+    current_string = '';
 }
 
 
@@ -40,6 +69,8 @@ function enterChild()
 time = 0
 function animate_scene()
 {
+    time++;
+
 	var y_dest = getY(current_index - .5);
 	var y_src  = click_box.position.y;
 	
@@ -48,21 +79,47 @@ function animate_scene()
 	setClickBoxPosition(y_new);
 
     // This should make the text meshes rotate in some sort of animated and thematic way.
-    if(text_meshes)
+    if(text_mesh)
     {
-        var len = text_meshes.children.length
+        var len = text_mesh.length;
         
         for(var i = 0; i < len; i++)
         {
-            mesh = text_meshes.children[i]
+            mesh = text_mesh[i]
             rotation = mesh.rotation
-            rotation.z = Math.random() * Math.PI/8 - Math.PI/4
+            rotation.copy(new THREE.Vector3(0, 0, Math.random() * Math.PI/8 - Math.PI/4));
         }
     }
+
+    // Set height to proper column.
+    cursor_mesh.position.y = getY(current_index - .3)
+
+    if(text_mesh[current_index])
+    {
+        // Set x location past the length of the current string.
+        var box = new THREE.Box3().setFromObject(text_mesh[current_index]);
+
+        cursor_mesh.position.x = box.max.x + dim.padding
+    }  
+
+    
+    if(time % 100 > 50)
+    {
+        cursor_mesh.material.color = new THREE.Color(col1);
+    }
+    else
+    {
+        cursor_mesh.material.color = new THREE.Color(col2);
+    }
+    
+
 }
 
 function start()
 {
+
+    scene.children = [];
+
 	// Font is now loaded.
 	strings = TREE.getCurrentText()
 	for(var i = 0; i < TREE.getBranchNum(); i++)
@@ -82,6 +139,9 @@ function start()
 	// Render the click box over top of the hover box.
 	col1 = 0x3B5998; // FB blue.
 	click_box = new_line_box(col1);
+
+    // The cursor is a vertical bar.
+    cursor_mesh = new_vertical_line(dim.x + padding, getY(.3) - getY(.0));
 
 	render();
 }

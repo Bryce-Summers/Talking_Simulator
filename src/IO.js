@@ -19,11 +19,11 @@ KeyAction.prototype.keyDown = function(key_code)
 {
 	var key_name = KeyboardState.keyName(key_code);
 
-	console.log(key_name);
+	//console.log(key_name);
 
 	if(key_name === "enter")
 	{
-		enterChild();
+        executeStatement();
 		return;
 	}
 
@@ -39,6 +39,22 @@ KeyAction.prototype.keyDown = function(key_code)
 	{
 		key_name = ' ';
 	}
+
+    // Change the index down by one box.
+    if(key_name === 'down')
+    {
+        executeStatement();
+        var index = (current_index + 1) % text_mesh.length;
+        changeIndex(index);
+    }
+
+    // Change the index up by one box.
+    if(key_name === 'up')
+    {
+        executeStatement();
+        var index = (current_index + text_mesh.length - 1) % text_mesh.length;
+        changeIndex(index);
+    }
 
 	if(key_name.length === 1)
 	{
@@ -59,14 +75,22 @@ KeyAction.prototype.keyDown = function(key_code)
 		current_string = current_string.substring(0, current_string.length - 1);
 	}
 
-	updateTextMesh(current_index, current_string);
+    // Display the old message for no input.
+    if(current_string.length < 1)
+    {
+        updateTextMesh(current_index, TREE.getText(current_index));
+    }
+    else // display the current string.
+    {
+	   updateTextMesh(current_index, current_string);
+    }
 }
 var keyboard = new KeyboardState(new KeyAction());
 
 function init_input()
 {
 
-    //window.addEventListener( 'resize', onWindowResize, false);
+    window.addEventListener( 'resize', onWindowResize, false);
 
     //window.addEventListener("keypress", onKeyPress);
     //window.addEventListener("keydown", onKeyPress);
@@ -100,13 +124,25 @@ function onMouseDown( event )
 	
 	var index = mouse_y / round;
 	index = Math.floor(index);
-	
-	
-	current_highlight = false;
-	updateTextMesh(current_index, TREE.getText(current_index));
-	current_index = index;
-	current_highlight = true;
-	
-	current_string = "";
-	updateTextMesh(current_index, current_string);
+
+    executeStatement();
+	changeIndex(index);
+}
+
+function changeIndex(index)
+{
+    current_highlight = false;
+    updateTextMesh(current_index, TREE.getText(current_index));
+    current_index = index;
+    current_highlight = true;
+    
+    current_string = "";
+    //updateTextMesh(current_index, current_string);
+}
+
+function onWindowResize()
+{
+    console.log("resize");
+    dim = {x:0, y:0, w:window.innerWidth, h:window.innerHeight, padding:10};
+    start();
 }

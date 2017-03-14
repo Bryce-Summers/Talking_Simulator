@@ -8,7 +8,8 @@
 function NEW_NODE()
 {
     var node = {};
-    node.txt = "Say something.";
+    node.txt = "Click, Comment, Reply, Repeat";
+    node.likes = 0;
     node.children = [];
     node.default = true
     return node;
@@ -73,12 +74,24 @@ TalkTree.prototype =
         return true;
     },
 
+    childExpanded(index)
+    {
+        var child = this.current.children[index];
+        return child.children.length > 0;
+    },
+
     setNode(str, index)
     {
         var children = this.current.children;
         node = children[index]
         node.txt = str;
         node.default = false;
+        node.likes++;
+    },
+
+    getLikes(index)
+    {
+        return this.current.children[index].likes;
     },
 
     // Goes to the indicated child,

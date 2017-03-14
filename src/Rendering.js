@@ -29,6 +29,7 @@ var padding = 20;
 
 var text_meshes = new THREE.Object3D();
 
+
 function new_text_mesh(str)
 {
 
@@ -56,6 +57,29 @@ function new_horizontal_line(y)
 
 	var line = new THREE.Line( geometry, material );
 	scene.add( line );
+    return line;
+}
+
+function new_vertical_line(x, height)
+{
+    var material = new THREE.LineBasicMaterial({
+        color: col1
+    });
+
+    var geometry = new THREE.Geometry();
+    geometry.vertices.push(
+        new THREE.Vector3( 0, 0, 0 ),
+        new THREE.Vector3( 0, 1, 0 )
+    );
+
+    var line = new THREE.Line( geometry, material );
+
+    line.position.copy(new THREE.Vector3(x, 0, 0))
+    line.scale.copy(new THREE.Vector3(1, height, 1))
+    //line
+
+    scene.add( line );
+    return line;
 }
 
 function new_line_box(col)
@@ -84,10 +108,12 @@ function new_line_box(col)
 function refresh_all_text()
 {
     current_texts = TREE.getCurrentText()
+    current_highlight = false;
     for(var i = 0; i < TREE.N; i++)
     {
         updateTextMesh(i, current_texts[i])
     }
+    current_highlight = true;
 }
 
 // Updates the text text mesh on the screen with the given index to the input string.

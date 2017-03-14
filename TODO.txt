@@ -1,0 +1,5 @@
+-- TODO Notes
+
+Prompt users to press enter.
+
+Show a cursor.

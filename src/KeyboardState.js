@@ -67,7 +67,7 @@ KeyboardState.onKeyDown = function(event)
 	if ( !KeyboardState.status[key] )
 		KeyboardState.status[key] = { down: false, pressed: false, up: false, updatedPreviously: false };
 
-	console.log("Hello key: " + key);
+	//console.log("Hello key: " + key);
 
 	// Tells the given action to execute a key down event for the given name.
 	if(KeyboardState.action)
